@@ -37,7 +37,7 @@
 \newcommand{\kJ}{\kappa_J}
 \newcommand{\eps}{\varepsilon}
 \newcommand{\topomass}{M}
-\newcommand{\Excit}{\mathcal{E}}
+\newcommand{\Excit}{E}
 \newcommand{\Mod}{\Phi}
 \newcommand{\Topo}{\Omega}
 \newcommand{\Info}{I}
@@ -105,7 +105,7 @@ The standard functions follow from this mechanism:
 
 The critical observation is that currency's \emph{necessity} depends on a precondition: the opacity of excitability topologies.
 If excitability topology becomes directly legible---if a system can measure, in real time, which agents are coordinating well and where coordination is actively forming---then the proxy becomes redundant.
-The information that price signals encode is already available in the topology.
+The information that price signals encode is already available in the topology (cf.~\cite{hayek1945}, which identifies price as the indispensable distributed-knowledge channel; we argue the precondition dissolves under legibility).
 
 This paper formalizes and demonstrates this claim.
 We draw on the Disentangle protocol~\cite{close2026}, which implements Topological Mass Consensus using Jaccard-based Ollivier-Ricci curvature~\cite{ollivier2009,pal2017} over a transaction DAG.
@@ -203,7 +203,7 @@ This functions as an excitability gate: agents whose coordination quality falls 
 \subsection{Excitability Topology}\label{sec:excit-topo}
 
 \begin{definition}[Excitability Function]\label{def:excit}
-Let $\mathcal{A}$ be a finite set of agents and $G = (\mathcal{A}, E)$ an interaction graph. An \emph{excitability function} is a map
+Let $\mathcal{A}$ be a finite set of agents and $G = (\mathcal{A}, \mathcal{E})$ an interaction graph. An \emph{excitability function} is a map
 \begin{equation}
   \Excit : \mathcal{A} \times \mathcal{A} \to [0, 1]
 \end{equation}
@@ -213,7 +213,7 @@ where $\Excit(i,j)$ denotes the readiness of agent $i$ to respond to a coordinat
 The excitability function induces a topology on $\mathcal{A}$: subsets of agents with high mutual excitability form clusters; gradients in excitability define natural boundaries between coordination domains.
 
 \begin{definition}[Excitability Topology]\label{def:excit-topo}
-The \emph{excitability topology} $\Topo_\Excit$ on $(\mathcal{A}, E)$ is the weighted graph where each edge $(i,j) \in E$ carries weight $\Excit(i,j) \cdot \Excit(j,i)$, representing mutual coordination readiness.
+The \emph{excitability topology} $\Topo_\Excit$ on $(\mathcal{A}, \mathcal{E})$ is the weighted graph where each edge $(i,j) \in \mathcal{E}$ carries weight $\Excit(i,j) \cdot \Excit(j,i)$, representing mutual coordination readiness.
 \end{definition}
 
 \begin{definition}[Self-Governed vs.\ Externally Modulable Excitability]\label{def:self-gov}
@@ -243,12 +243,14 @@ The standard monetary functions are instances of $\Mod$:
 The key structural property of $\Mod$ is that it \emph{requires opacity} of~$\Excit$.
 
 \begin{proposition}[Opacity Requirement]\label{prop:opacity}
-If $\Excit(i,j)$ is directly observable by all agents for all $(i,j) \in E$, then for any modulation operator $\Mod$ and any token $\tau \in \Theta$, the information conveyed by $\Mod(\tau, i)$ about $i$'s subsequent coordination behavior is a subset of the information already available in~$\Excit$.
+If $\Excit(i,j)$ is directly observable by all agents for all $(i,j) \in \mathcal{E}$, then for any modulation operator $\Mod$ and any token $\tau \in \Theta$, the information conveyed by $\Mod(\tau, i)$ about $i$'s subsequent coordination behavior is a subset of the information already available in~$\Excit$.
 \end{proposition}
 
 \begin{proof}
 Under full observability, agent $j$ seeking to coordinate with $i$ can read $\Excit(i,j)$ directly. The modulation $\Mod(\tau,i)$ shifts $\Excit(i,j)$ to some $\Excit'(i,j)$. But $\Excit'(i,j)$ is also directly observable. Therefore, $j$ learns $i$'s post-modulation readiness from $\Excit'$, not from observing whether $\tau$ was transferred. The transfer event carries no information not already in the excitability topology.
 \end{proof}
+
+Throughout this section, all random variables are discrete (equivalently, continuous measurements are quantized at finite resolution), and all entropies are Shannon entropies.
 
 \begin{lemma}[Price as Lossy Compression]\label{lem:compression}
 A price signal $P$ is a scalar-valued function of the excitability topology: $P = f(\Excit)$ for some (many-to-one) map $f$. Since $f$ is not injective (many distinct excitability configurations map to the same price), $\Ent(P) < \Ent(\Excit)$, and information is lost:
@@ -409,7 +411,7 @@ The mapping is structural up to an abstraction boundary. We claim computational 
   \node[font=\scriptsize, orange] at (-2.8, 2.5) {$\partial\kappa_J/\partial d$};
   \node[font=\scriptsize, orange] at (-2.8, 2.1) {gradient signal};
   
-  \node[annot] at (0, -2.8) {Green: high curvature\\(measured from topology)\\Threshold: CoherenceMin};
+  \node[annot] at (0, -2.8) {Green: high curvature\\(measured from topology)\\Threshold: CoherenceMinimum};
 \end{scope}
 
 \end{tikzpicture}
@@ -522,7 +524,7 @@ This allocation mechanism differs from Walrasian equilibrium in structural ways:
 \end{itemize}
 
 \begin{proposition}[Allocation Overhead]\label{prop:overhead}
-Curvature-weighted allocation (\Cref{def:allocation}) has computational complexity $O(|E|)$ for a single allocation round, where $|E|$ is the edge count. By contrast, Nash equilibrium computation is PPAD-complete~\cite{daskalakis2009}, and Arrow-Debreu market equilibrium faces similar complexity barriers~\cite{chen2009arrow}.
+Curvature-weighted allocation (\Cref{def:allocation}) has computational complexity $O(|\mathcal{E}|)$ for a single allocation round, where $|\mathcal{E}|$ is the edge count. By contrast, Nash equilibrium computation is PPAD-complete~\cite{daskalakis2009}, and Arrow-Debreu market equilibrium faces similar complexity barriers~\cite{chen2009arrow}.
 \end{proposition}
 
 \subsection{Why Standard Game Theory Breaks}\label{sec:game-theory}
@@ -807,6 +809,8 @@ Eve   & 150 & $-0.10$ & 0 \\
 \end{tabular}
 \end{center}
 
+\smallskip\noindent{\footnotesize\textit{Note:} Allocations rounded to nearest integer; total normalized to pool size $R = 1000$.}
+
 \medskip\noindent
 Allocation follows \Cref{def:allocation}: Eve's negative gradient excludes her entirely.
 Alice receives the largest share not because she has the most mass (though she does), but because she has the highest coordination formation rate.
@@ -859,7 +863,7 @@ The loop is self-reinforcing for coherent agents and self-attenuating for extrac
 
 \textbf{Computational cost.}
 Curvature computation is $O(|N(u)| + |N(v)|)$ per edge with the ancestor-depth neighbor set construction~\cite{close2026}, which is efficient for bounded-degree graphs.
-However, maintaining the full curvature derivative field over a large graph requires $O(|E|)$ computation per epoch.
+However, maintaining the full curvature derivative field over a large graph requires $O(|\mathcal{E}|)$ computation per epoch.
 For graphs with millions of edges, this may require hierarchical approximation or sampling.
 
 \textbf{Graph connectivity and cold start.}
