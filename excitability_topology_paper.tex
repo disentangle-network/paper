@@ -1,10 +1,12 @@
-\documentclass[conference,10pt,letterpaper]{IEEEtran}
+\documentclass[11pt,letterpaper]{article}
 
 % ─── Packages ───────────────────────────────────────────────────
+\usepackage[margin=1in]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{mathtools}
+\usepackage{thmtools}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,calc,decorations.markings,patterns,shapes.geometric}
 \usepackage{pgfplots}
@@ -18,17 +20,16 @@
 \usepackage{booktabs}
 \usepackage{microtype}
 \usepackage{enumitem}
-\usepackage{balance}
+\usepackage{authblk}
 
-% ─── Theorem Environments ───────────────────────────────────────
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{corollary}[theorem]{Corollary}
-\theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{remark}[theorem]{Remark}
-\newtheorem{example}[theorem]{Example}
+% ─── Theorem Environments (thmtools for cleveref integration) ───
+\declaretheorem[name=Theorem,numberwithin=section]{theorem}
+\declaretheorem[name=Lemma,sibling=theorem]{lemma}
+\declaretheorem[name=Proposition,sibling=theorem]{proposition}
+\declaretheorem[name=Corollary,sibling=theorem]{corollary}
+\declaretheorem[name=Definition,sibling=theorem,style=definition]{definition}
+\declaretheorem[name=Remark,sibling=theorem,style=definition]{remark}
+\declaretheorem[name=Example,sibling=theorem,style=definition]{example}
 
 % ─── Notation shortcuts ────────────────────────────────────────
 \newcommand{\R}{\mathbb{R}}
@@ -36,12 +37,12 @@
 \newcommand{\kJ}{\kappa_J}
 \newcommand{\eps}{\varepsilon}
 \newcommand{\topomass}{M}
-\newcommand{\excit}{\varepsilon}
 \newcommand{\Excit}{\mathcal{E}}
-\newcommand{\Mod}{\mathcal{M}}
-\newcommand{\Topo}{\mathcal{T}}
+\newcommand{\Mod}{\Phi}
+\newcommand{\Topo}{\Omega}
 \newcommand{\Info}{I}
 \newcommand{\Ent}{H}
+\newcommand{\meangrad}{\bar{\kappa}'_J}
 
 \hypersetup{
   colorlinks=true,
@@ -56,11 +57,10 @@
 \title{Excitability Topology and the Obsolescence of Price:\\
 Currency as Modulation, Coherence as Market}
 
-\author{
-\IEEEauthorblockN{Larsen Close}
-\IEEEauthorblockA{Independent Researcher\\
-\texttt{larsen@disentangle.network}}
-}
+\author{Larsen James Close}
+\affil{Independent Researcher}
+
+\date{February 2026}
 
 \maketitle
 
@@ -68,17 +68,15 @@ Currency as Modulation, Coherence as Market}
 % ABSTRACT
 % ════════════════════════════════════════════════════════════════
 \begin{abstract}
-Currency is a technology for remotely modulating excitability topologies across agents whose internal states are opaque.
-Price signals are a lossy proxy for excitability gradients---they encode ``what will shift your action-readiness'' into a transferable scalar.
-A system that makes excitability topology directly legible---via geometric measurement of coordination quality (curvature) and coordination formation rate (curvature derivative)---renders the proxy unnecessary.
-We formalize this claim information-theoretically, showing that under complete excitability legibility the mutual information between price and excitability vanishes.
-We demonstrate the claim mechanistically via the Disentangle protocol's Jaccard-based Ollivier-Ricci curvature, mapping protocol primitives to a formal excitability framework.
-The curvature derivative $\partial\kJ/\partial d$ serves as a dopaminergic market signal: agents interpreting it as ``return on investment'' and agents interpreting it as ``where is genuine information being created'' produce identical graph dynamics, making the transition from price-mediated to topology-mediated coordination structurally gradual and ideology-independent.
+Currency exists because agents cannot directly observe each other's readiness to coordinate.
+Price signals compress this hidden structure---an agent's \emph{excitability topology}---into transferable scalars.
+We show that a system making excitability topology directly legible renders price redundant: under complete topological legibility, the mutual information between price and excitability vanishes (with a continuous bound for partial legibility).
+We formalize excitability topology over interaction graphs, define currency as a modulation operator on that topology, and map the framework onto the Disentangle protocol's Jaccard-based Ollivier-Ricci curvature.
+The curvature derivative $\partial\kJ/\partial d$ measures the rate of coordination formation---a structural analog of dopaminergic prediction-error signaling.
+Agents interpreting this derivative as ``return on investment'' and agents interpreting it as ``where is genuine information being created'' produce identical graph dynamics, making the transition from price-mediated to topology-mediated coordination structurally gradual and ideology-independent.
 \end{abstract}
 
-\begin{IEEEkeywords}
-excitability topology, curvature, Ollivier-Ricci, consensus, resource allocation, dopamine, price theory, information theory
-\end{IEEEkeywords}
+\medskip\noindent\textbf{Keywords:} excitability topology, curvature, Ollivier-Ricci, consensus, resource allocation, dopamine, price theory, information theory
 
 % ════════════════════════════════════════════════════════════════
 \section{Introduction}\label{sec:intro}
@@ -230,9 +228,9 @@ The distinction is structural: in a self-governed regime, excitability reflects 
 \begin{definition}[Modulation Operator]\label{def:mod-op}
 A \emph{modulation operator} is a map
 \begin{equation}
-  \Mod : \mathcal{T} \times \mathcal{A} \to \Delta\Excit
+  \Mod : \Theta \times \mathcal{A} \to \Delta\Excit
 \end{equation}
-where $\mathcal{T}$ is a set of transferable tokens and $\Delta\Excit$ denotes a change in the excitability function. For token $\tau \in \mathcal{T}$ and agent $i \in \mathcal{A}$, $\Mod(\tau, i)$ is the shift in $i$'s excitability landscape induced by receiving $\tau$.
+where $\Theta$ is a set of transferable tokens and $\Delta\Excit$ denotes a change in the excitability function. For token $\tau \in \Theta$ and agent $i \in \mathcal{A}$, $\Mod(\tau, i)$ is the shift in $i$'s excitability landscape induced by receiving $\tau$.
 \end{definition}
 
 The standard monetary functions are instances of $\Mod$:
@@ -242,14 +240,26 @@ The standard monetary functions are instances of $\Mod$:
   \item \emph{Unit of account}: tokens are quantized so that $\Mod(n\tau, i) \approx n \cdot \Mod(\tau, i)$ for small perturbations, enabling linear comparison.
 \end{itemize}
 
-The key structural property of $\Mod$ is that it \emph{requires opacity} of $\Excit$.
+The key structural property of $\Mod$ is that it \emph{requires opacity} of~$\Excit$.
 
 \begin{proposition}[Opacity Requirement]\label{prop:opacity}
-If $\Excit(i,j)$ is directly observable by all agents for all $(i,j) \in E$, then for any modulation operator $\Mod$ and any token $\tau$, the information conveyed by $\Mod(\tau, i)$ about $i$'s subsequent coordination behavior is a subset of the information already available in $\Excit$.
+If $\Excit(i,j)$ is directly observable by all agents for all $(i,j) \in E$, then for any modulation operator $\Mod$ and any token $\tau \in \Theta$, the information conveyed by $\Mod(\tau, i)$ about $i$'s subsequent coordination behavior is a subset of the information already available in~$\Excit$.
 \end{proposition}
 
 \begin{proof}
 Under full observability, agent $j$ seeking to coordinate with $i$ can read $\Excit(i,j)$ directly. The modulation $\Mod(\tau,i)$ shifts $\Excit(i,j)$ to some $\Excit'(i,j)$. But $\Excit'(i,j)$ is also directly observable. Therefore, $j$ learns $i$'s post-modulation readiness from $\Excit'$, not from observing whether $\tau$ was transferred. The transfer event carries no information not already in the excitability topology.
+\end{proof}
+
+\begin{lemma}[Price as Lossy Compression]\label{lem:compression}
+A price signal $P$ is a scalar-valued function of the excitability topology: $P = f(\Excit)$ for some (many-to-one) map $f$. Since $f$ is not injective (many distinct excitability configurations map to the same price), $\Ent(P) < \Ent(\Excit)$, and information is lost:
+\begin{equation}
+  \Info(P\,;\,\Excit) \leq \Ent(P) < \Ent(\Excit)
+\end{equation}
+Price is a lossy compression of the excitability topology.
+\end{lemma}
+
+\begin{proof}
+$P = f(\Excit)$ is a deterministic function, so $\Ent(P \mid \Excit) = 0$ and $\Info(P\,;\,\Excit) = \Ent(P)$. Since $f$ is many-to-one, $\Ent(P) < \Ent(\Excit)$.
 \end{proof}
 
 We now state the central information-theoretic result.
@@ -257,7 +267,7 @@ We now state the central information-theoretic result.
 \begin{theorem}[Price Redundancy Under Excitability Legibility]\label{thm:redundancy}\label{sec:redundancy}
 Let $P$ be the random variable representing price signals in a market, and let $\Excit$ be the random variable representing the excitability topology over the agent graph. Denote by $\Topo$ a measurement system that makes $\Excit$ legible. Then
 \begin{equation}\label{eq:redundancy}
-  \Info(P\,;\,\Excit \mid \Topo) \leq \Ent(\Excit) - \Ent(\Excit \mid \Topo)
+  \Info(P\,;\,\Excit \mid \Topo) \leq \Ent(\Excit \mid \Topo)
 \end{equation}
 and in the limit of complete legibility ($\Ent(\Excit \mid \Topo) \to 0$):
 \begin{equation}
@@ -267,12 +277,23 @@ That is, when the topology measurement system resolves all uncertainty in $\Exci
 \end{theorem}
 
 \begin{proof}
-By the data processing inequality, $\Info(P\,;\,\Excit \mid \Topo) \leq \Info(\Excit\,;\,\Excit \mid \Topo) = \Ent(\Excit \mid \Topo)$.
-If $\Topo$ resolves $\Excit$ completely, $\Ent(\Excit \mid \Topo) = 0$, so $\Info(P\,;\,\Excit \mid \Topo) = 0$.
+By definition of conditional mutual information,
+$\Info(P\,;\,\Excit \mid \Topo) = \Ent(\Excit \mid \Topo) - \Ent(\Excit \mid P, \Topo)$.
+Since conditional entropy is non-negative, $\Ent(\Excit \mid P, \Topo) \geq 0$, so
+$\Info(P\,;\,\Excit \mid \Topo) \leq \Ent(\Excit \mid \Topo)$.
+In the limit of complete legibility, $\Ent(\Excit \mid \Topo) = 0$, which forces $\Info(P\,;\,\Excit \mid \Topo) = 0$.
 \end{proof}
 
+\begin{corollary}[Partial Legibility]\label{cor:partial}
+For any measurement system $\Topo$ with residual entropy $\Ent(\Excit \mid \Topo) = \delta > 0$, the mutual information between price and excitability is bounded by~$\delta$:
+\begin{equation}
+  \Info(P\,;\,\Excit \mid \Topo) \leq \delta
+\end{equation}
+As $\delta \to 0$, price redundancy is continuous: each improvement in topological legibility monotonically reduces the information content of price.
+\end{corollary}
+
 \begin{remark}
-\Cref{thm:redundancy} does not claim that price becomes meaningless. It claims that price becomes \emph{redundant}: all information it encodes is already available through the topology. In practice, partial legibility yields partial redundancy, and the transition is continuous.
+\Cref{thm:redundancy} does not claim that price becomes meaningless. It claims that price becomes \emph{redundant}: all information it encodes is already available through the topology. \Cref{cor:partial} makes the transition explicit: partial legibility yields partial redundancy, and the transition is continuous in the residual entropy~$\delta$.
 \end{remark}
 
 \subsection{Curvature as Excitability Measurement}\label{sec:curv-excit}
@@ -280,6 +301,8 @@ If $\Topo$ resolves $\Excit$ completely, $\Ent(\Excit \mid \Topo) = 0$, so $\Inf
 We now map the Disentangle protocol's primitives to the excitability framework, establishing that Jaccard curvature constitutes a measurement of excitability topology.
 
 \begin{proposition}[Curvature--Excitability Correspondence]\label{prop:curv-excit}
+In the Disentangle context, excitability \emph{is defined as} capacity for structural integration---not as a hidden psychological state for which curvature might serve as a proxy. High Jaccard overlap indicates dense mutual coordination, which is precisely what excitability measures in this framework. (A rigid bureaucracy with high structural overlap but low adaptive responsiveness would exhibit high curvature and high excitability by this definition; the framework does not claim to capture internal cognitive readiness beyond what structural integration reveals.)
+
 The Jaccard curvature $\kJ(i,j)$ (\Cref{def:jaccard}) satisfies the formal requirements of an excitability measurement:
 \begin{enumerate}[label=(\roman*)]
   \item \textbf{Non-transferable.} $\kJ(i,j)$ is a property of the neighborhoods $N(i)$ and $N(j)$, not a token held by $i$ or $j$.
@@ -306,10 +329,10 @@ Firing threshold & CoherenceMinimum & Participation gate \\
 
 \medskip
 
-The mapping is structural, not metaphorical. Both systems---neural circuits and curvature-measured interaction graphs---implement the same computational primitive: they measure the quality and rate-of-change of coordination across a topology, and they gate participation based on accumulated coordination history.
+The mapping is structural up to an abstraction boundary. We claim computational role equivalence under a shared abstract interface, not neurobiological identity. The interface consists of four components: (i)~a \emph{state field} over a graph of interacting elements, (ii)~a \emph{modulation signal} encoding the rate of change of that field, (iii)~a \emph{gating mechanism} that thresholds participation based on accumulated state history, and (iv)~a \emph{learning/update rule} that adjusts the state field in response to the modulation signal. Both neural dopaminergic circuits and curvature-measured interaction graphs implement this interface. The abstraction boundary is that neuroscience involves tonic/phasic dopamine dynamics, multiple DA pathways (salience vs.\ reward prediction error), and circuit-specific receptor effects that have no direct analog in the graph setting. We do not claim the mapping extends below this boundary.
 
 % ─── Figure 1: Neural vs Graph Excitability Topology ───────────
-\begin{figure*}[t]
+\begin{figure}[t]
 \centering
 \begin{tikzpicture}[
   neuron/.style={circle, draw=blue!70, fill=blue!10, minimum size=8mm, font=\footnotesize},
@@ -390,9 +413,9 @@ The mapping is structural, not metaphorical. Both systems---neural circuits and 
 \end{scope}
 
 \end{tikzpicture}
-\caption{Structural analogy between neural excitability topology (left) and graph curvature topology (right). In both systems, the \emph{rate of change} of the topology (dopamine signal / curvature derivative) carries the actionable information, while accumulated history (LTP / topological mass) gates participation. Red/dark green nodes indicate high excitability or curvature.}
+\caption{Structural analogy between neural excitability topology (left) and graph curvature topology (right). \textbf{Left}: Seven neurons connected by synapses; red (active) neurons $n_1$, $n_2$, $n_4$ have high excitability modulated by a dopamine (DA) signal. \textbf{Right}: Corresponding graph nodes; dark green nodes $v_1$, $v_2$, $v_4$ have high Jaccard curvature ($\kappa = 0.5$--$0.7$), with the curvature derivative $\partial\kJ/\partial d$ as the analog of the DA signal. In both systems, the rate of change carries the actionable information, while accumulated history (LTP / topological mass) gates participation.}
 \label{fig:neural-graph-analogy}
-\end{figure*}
+\end{figure}
 
 % ════════════════════════════════════════════════════════════════
 \section{The Gradient as Market Signal}\label{sec:gradient}
@@ -404,11 +427,11 @@ Static curvature $\kJ(i,j)$ measures the established quality of a relationship--
 The curvature derivative measures the \emph{rate} at which coordination quality is changing:
 
 \begin{definition}[Curvature Derivative]\label{def:curv-deriv}
-For edge $(i,j)$ in a DAG with topological depth function $d(\cdot)$, the curvature derivative is
+For edge $(i,j)$ in a DAG with topological depth function $d(\cdot)$, the curvature derivative is the finite difference
 \begin{equation}\label{eq:curv-deriv}
-  \frac{\partial\kJ(i,j)}{\partial d} = \lim_{\Delta d \to 1} \frac{\kJ^{(d+\Delta d)}(i,j) - \kJ^{(d)}(i,j)}{\Delta d}
+  \frac{\partial\kJ(i,j)}{\partial d} \coloneqq \kJ^{(d+1)}(i,j) - \kJ^{(d)}(i,j)
 \end{equation}
-where $\kJ^{(d)}$ denotes the curvature computed from the subgraph at depth $d$.
+where $\kJ^{(d)}$ denotes the curvature computed from the subgraph at depth $d$. Since topological depth is integer-valued, this is a discrete difference rather than a continuous derivative; we retain the $\partial$ notation for consistency with the gradient formalism below.
 \end{definition}
 
 \begin{remark}
@@ -426,7 +449,7 @@ The gradient direction indicates which neighbors are experiencing the most activ
 \end{definition}
 
 This gradient is the analog of the dopaminergic signal: it marks \emph{where prediction errors are being resolved}, which is where genuine information is being created.
-The following parallel is exact:
+The following parallel is structural (not a claimed neurobiological isomorphism):
 \begin{itemize}
   \item \textbf{Neural}: Dopamine signals prediction error resolution $\to$ circuits that are actively learning receive increased excitability $\to$ attention flows to regions of active information creation.
   \item \textbf{Graph}: Curvature derivative signals coherence formation $\to$ neighborhoods with $\partial\kJ/\partial d > 0$ are actively integrating $\to$ resources flow to regions of active coordination.
@@ -475,24 +498,31 @@ In the Disentangle protocol, external resources (compute, storage, fiat currency
 Distribution from these pools is weighted by the curvature derivative, not by price negotiation.
 The topology \emph{is} the allocation mechanism.
 
+\begin{definition}[Mean Curvature Derivative]\label{def:mean-grad}
+The \emph{mean curvature derivative} at node $i$ is the scalar
+\begin{equation}
+  \meangrad(i) = \frac{1}{|N(i)|}\sum_{j \in N(i)} \frac{\partial\kJ(i,j)}{\partial d}
+\end{equation}
+which averages the per-neighbor curvature derivatives from the gradient vector $\nabla\kJ(i)$.
+\end{definition}
+
 \begin{definition}[Curvature-Weighted Allocation]\label{def:allocation}
 For a Commons Pool with resource quantity $R$ and eligible agent set $\mathcal{A}_{\text{elig}} = \{i : \topomass(i) \geq \theta_{\min}\}$, the allocation to agent $i$ is
 \begin{equation}\label{eq:allocation}
-  a(i) = R \cdot \frac{\max\bigl(0,\; \nabla\kJ(i)\bigr)}{\sum_{k \in \mathcal{A}_{\text{elig}}} \max\bigl(0,\; \nabla\kJ(k)\bigr)}
+  a(i) = R \cdot \frac{\max\bigl(0,\; \meangrad(i)\bigr)}{\sum_{k \in \mathcal{A}_{\text{elig}}} \max\bigl(0,\; \meangrad(k)\bigr)}
 \end{equation}
-where $\nabla\kJ(i) = \frac{1}{|N(i)|}\sum_{j \in N(i)} \partial\kJ(i,j)/\partial d$ is the mean curvature derivative at $i$.
 \end{definition}
 
 This allocation mechanism differs from Walrasian equilibrium in structural ways:
 \begin{itemize}
   \item No order book, no bid-ask spread, no price discovery latency.
   \item Allocation reflects \emph{current coordination formation rate}, not historical willingness-to-pay.
-  \item Agents with declining coordination quality ($\nabla\kJ < 0$) receive zero allocation---the gradient automatically redirects resources to where coherence is actively forming.
-  \item Sybil agents, whose boundary edges exhibit negative curvature~\cite{close2026}, have low or negative $\nabla\kJ$ and are excluded from allocation.
+  \item Agents with declining coordination quality ($\meangrad < 0$) receive zero allocation---the gradient automatically redirects resources to where coherence is actively forming.
+  \item Sybil agents, whose boundary edges exhibit negative curvature~\cite{close2026}, have low or negative $\meangrad$ and are excluded from allocation.
 \end{itemize}
 
 \begin{proposition}[Allocation Overhead]\label{prop:overhead}
-Curvature-weighted allocation (\Cref{def:allocation}) has computational complexity $O(|E|)$ for a single allocation round, where $|E|$ is the edge count. Walrasian equilibrium computation is PPAD-complete in general~\cite{daskalakis2009}.
+Curvature-weighted allocation (\Cref{def:allocation}) has computational complexity $O(|E|)$ for a single allocation round, where $|E|$ is the edge count. By contrast, Nash equilibrium computation is PPAD-complete~\cite{daskalakis2009}, and Arrow-Debreu market equilibrium faces similar complexity barriers~\cite{chen2009arrow}.
 \end{proposition}
 
 \subsection{Why Standard Game Theory Breaks}\label{sec:game-theory}
@@ -519,14 +549,14 @@ where superscript $(s)$ indicates dependence on the strategy profile. The payoff
 \end{proposition}
 
 The combination of \Cref{prop:action-space,prop:payoff} means that the system is not a standard game.
-It is closer to a \emph{topological game}~\cite{bruin2013}, where the strategy space itself has geometric structure, and the topology constrains which games agents can enter.
+It is closer to a \emph{Riemannian game}~\cite{mertikopoulos2018}, where the strategy space itself has geometric structure, and the topology constrains which games agents can enter.
 
-\begin{theorem}[Non-Applicability of Classical Nash Equilibrium]\label{thm:nash}
-In a curvature-gated coordination system $\Gamma_\kappa = (\mathcal{A}, \{S_i(\kJ)\}, \{u_i(\kJ)\})$ where both action sets and utility functions depend on the curvature field $\kJ$, and $\kJ$ is a function of the joint strategy profile, the fixed-point conditions for Nash equilibrium
+\begin{theorem}[Inadequacy of Classical Nash Equilibrium]\label{thm:nash}
+In a curvature-gated coordination system $\Gamma_\kappa = (\mathcal{A}, \{S_i(\kJ)\}, \{u_i(\kJ)\})$ where both action sets and utility functions depend on the curvature field $\kJ$, and $\kJ$ is a function of the joint strategy profile, the standard fixed-point conditions for Nash equilibrium
 \begin{equation}
   \forall i,\; s_i^* \in \arg\max_{s_i \in S_i} u_i(s_i, s_{-i}^*)
 \end{equation}
-are not well-defined, because $S_i$ and $u_i$ are themselves functions of $s^*$ through $\kJ(s^*)$.
+do not directly apply, because $S_i$ and $u_i$ are themselves functions of $s^*$ through $\kJ(s^*)$.
 \end{theorem}
 
 \begin{proof}
@@ -535,19 +565,20 @@ A Nash equilibrium requires that each agent's strategy is optimal given the fixe
   s_i^* \in \arg\max_{s_i \in S_i(\kJ(s_i, s_{-i}^*))} u_i\bigl(s_i, s_{-i}^*;\; \kJ(s_i, s_{-i}^*)\bigr)
 \]
 The domain of optimization ($S_i$) depends on the choice variable ($s_i$) through $\kJ$. This is not a standard optimization problem; fixed points of this map are not Nash equilibria in the classical sense, as the game $\Gamma_\kappa$ is not fixed across strategy profiles.
+More general equilibrium concepts---such as Markov perfect equilibria in stochastic games~\cite{shapley1953} or fixed points in Riemannian game dynamics~\cite{mertikopoulos2018}---may apply, but the relevant solution concept for curvature-gated systems is the geometric attractor defined below.
 \end{proof}
 
-The relevant equilibrium concept is instead a \emph{geometric attractor}:
+The positive claim is stronger than the negative one: the system is better modeled as a topological game with geometric attractors than as a standard game with Nash equilibria. The relevant equilibrium concept is a \emph{geometric attractor}:
 
 \begin{definition}[Curvature Attractor]\label{def:attractor}
 A state of the interaction graph $G$ is a \emph{curvature attractor} if, for all agents $i$ in $G$, the gradient $\nabla\kJ(i)$ points toward higher local curvature, and the CoherenceMinimum gate ensures that agents deviating from the attractor basin experience reduced action sets.
 \end{definition}
 
-Informally: ``grow local curvature or become isolated'' is a geometric attractor, not a Nash equilibrium.
-The dynamics are convergent because curvature throttling~\cite{close2026} makes defection self-punishing---the act of fabricating coordination (Sybil behavior) creates the negative curvature that reduces the defector's influence.
+The curvature attractor is the natural equilibrium concept for this system because it captures both the geometric constraint (action sets depend on topology) and the convergence mechanism (curvature throttling makes defection self-punishing). Informally: ``grow local curvature or become isolated'' is a geometric attractor, not a Nash equilibrium.
+The dynamics are convergent because the act of fabricating coordination (Sybil behavior) creates the negative curvature that reduces the defector's influence~\cite{close2026}.
 
 % ─── Figure 3: Curvature Derivative Field ──────────────────────
-\begin{figure*}[t]
+\begin{figure}[t]
 \centering
 \begin{tikzpicture}[
   cnode/.style={circle, minimum size=6mm, draw=black!70, font=\scriptsize, inner sep=0pt},
@@ -618,9 +649,9 @@ The dynamics are convergent because curvature throttling~\cite{close2026} makes 
 \node[font=\scriptsize] at (10, -1.7) {Length: gradient magnitude};
 
 \end{tikzpicture}
-\caption{Curvature derivative field over an example interaction graph. Node color indicates $\partial\kJ/\partial d$ (red: decreasing coordination quality; green: increasing). Arrows show the gradient direction and magnitude. Resources flow rightward---toward the region of active coherence formation---regardless of whether agents interpret the gradient as ``ROI'' or ``information creation.''}
+\caption{Curvature derivative field over a 13-node interaction graph arranged in three rows. Node color encodes $\partial\kJ/\partial d$: red ($< -0.3$, decreasing coordination) through yellow ($\approx 0$) to dark green ($> 0.5$, increasing coordination). Arrows at each node show the gradient direction and magnitude. The gradient points rightward across the graph, indicating resources flow toward the region of active coherence formation---regardless of whether agents interpret the gradient as ``ROI'' or ``information creation.''}
 \label{fig:curvature-gradient}
-\end{figure*}
+\end{figure}
 
 
 % ════════════════════════════════════════════════════════════════
@@ -633,8 +664,8 @@ The most counterintuitive property of curvature-mediated coordination is that th
 Consider two agents with opposed interpretive frameworks:
 
 \begin{itemize}
-  \item \textbf{Agent $A$ (pre-shift)}: interprets $\nabla\kJ > 0$ as ``high ROI region.'' Follows the gradient to maximize returns.
-  \item \textbf{Agent $B$ (post-shift)}: interprets $\nabla\kJ > 0$ as ``region of genuine information creation.'' Follows the gradient to maximize coherence contribution.
+  \item \textbf{Agent $A$ (pre-shift)}: interprets $\meangrad > 0$ as ``high ROI region.'' Follows the gradient to maximize returns.
+  \item \textbf{Agent $B$ (post-shift)}: interprets $\meangrad > 0$ as ``region of genuine information creation.'' Follows the gradient to maximize coherence contribution.
 \end{itemize}
 
 Both agents produce \emph{identical graph dynamics}: they direct coordination effort toward regions of positive curvature derivative.
@@ -642,15 +673,15 @@ The graph cannot distinguish between their motivations.
 The curvature that results from $A$'s coordination is geometrically identical to the curvature that results from $B$'s coordination.
 
 \begin{proposition}[Interpretive Invariance of Graph Dynamics]\label{prop:invariance}
-Let $\sigma_A$ and $\sigma_B$ be the strategies of agents $A$ and $B$ where $\sigma_A$ maximizes a utility function $u_A(\nabla\kJ)$ and $\sigma_B$ maximizes $u_B(\nabla\kJ)$, with $u_A \neq u_B$ but both monotonically increasing in $\nabla\kJ$. Then the graph evolution $G(t+1)$ is identical under $\sigma_A$ and $\sigma_B$:
+Let $\sigma_A$ and $\sigma_B$ be the strategies of agents $A$ and $B$ where $\sigma_A$ maximizes a utility function $u_A(\meangrad)$ and $\sigma_B$ maximizes $u_B(\meangrad)$, with $u_A \neq u_B$ but both monotonically increasing in $\meangrad$. Then the graph evolution $G(t+1)$ is identical under $\sigma_A$ and $\sigma_B$:
 \begin{equation}
   G^{(\sigma_A)}(t+1) = G^{(\sigma_B)}(t+1)
 \end{equation}
-whenever $\arg\max_{j \in N(i)} \nabla\kJ(i,j)$ is unique.
+whenever $\arg\max_{j \in N(i)} \partial\kJ(i,j)/\partial d$ is unique.
 \end{proposition}
 
 \begin{proof}
-Both strategies select the neighbor $j^* = \arg\max_{j \in N(i)} \nabla\kJ(i,j)$ for the next coordination action. Since the gradient is a property of the graph (not of the agent's interpretation), and both utilities are monotone in $\nabla\kJ$, both agents take the same action. The resulting graph modification is therefore identical.
+Both strategies select the neighbor $j^* = \arg\max_{j \in N(i)} \partial\kJ(i,j)/\partial d$ for the next coordination action. Since the curvature derivative is a property of the graph (not of the agent's interpretation), and both utilities are monotone in $\meangrad$, both agents take the same action. The resulting graph modification is therefore identical.
 \end{proof}
 
 This means the transition is \emph{structurally gradual}: as agents observe the correlation between curvature and coordination quality, they increasingly rely on the topology over the price proxy.
@@ -666,7 +697,7 @@ The system converges regardless of ideology.
 ]
 
 % The shared gradient
-\node[rectangle, draw=blue!70, fill=blue!10, rounded corners=4pt, minimum width=50mm, minimum height=10mm, font=\small\bfseries] (grad) at (0, 0) {$\nabla\kJ > 0$ (same signal)};
+\node[rectangle, draw=blue!70, fill=blue!10, rounded corners=4pt, minimum width=50mm, minimum height=10mm, font=\small\bfseries] (grad) at (0, 0) {$\meangrad > 0$ (same signal)};
 
 % Pre-shift interpretation
 \node[box, fill=orange!10] (pre) at (-2.2, -2) {Pre-shift:\\``High ROI''};
@@ -689,7 +720,7 @@ The system converges regardless of ideology.
 \node[font=\tiny, text width=3.5cm, align=center, gray] at (0, -5) {Graph dynamics identical\\(\Cref{prop:invariance})};
 
 \end{tikzpicture}
-\caption{The transition path: two interpretive frameworks, one gradient, identical behavior. Pre-shift agents follow $\nabla\kJ$ for ROI; post-shift agents follow it for coherence. The graph cannot distinguish between them.}
+\caption{The transition path: two interpretive frameworks, one gradient, identical behavior. Pre-shift agents follow $\meangrad$ for ROI; post-shift agents follow it for coherence. The graph cannot distinguish between them.}
 \label{fig:transition-path}
 \end{figure}
 
@@ -701,8 +732,8 @@ An agent whose excitability function $\Excit(i,j)$ is determined by internal sta
 Token transfer does not shift their coordination readiness.
 However, they remain coordinatable: mutual excitability through genuine coherence (high $\kJ$) provides the coordination channel.
 
-\begin{proposition}[Modulation Resistance of Self-Governed Agents]\label{prop:self-gov}
-For a self-governed agent $i$ (\Cref{def:self-gov}), $\Mod(\tau, i) = 0$ for all tokens $\tau$. The only path to coordination with $i$ is through achieving $\kJ(i,j) > 0$ via genuine structural integration.
+\begin{proposition}[Coordination Channel for Self-Governed Agents]\label{prop:self-gov}
+For a self-governed agent $i$ (\Cref{def:self-gov}), $\Mod(\tau, i) = 0$ for all tokens $\tau \in \Theta$ (by definition). However, $i$ remains coordinatable: mutual excitability $\Excit(i,j) \cdot \Excit(j,i) > 0$ is achievable whenever $\kJ(i,j) > 0$, since high curvature certifies the structural integration that self-governed excitability responds to. The modulation channel closes but the coordination channel remains open.
 \end{proposition}
 
 This formalizes a shift in the nature of value: from ``capacity to modulate others' excitability'' (token-denominated value) to ``capacity to create mutual information through coordination'' (topology-denominated value).
@@ -725,11 +756,11 @@ The system cannot, by its own dynamics, close the consequence chain.
 Topology-mediated systems are gracefully completable because curvature throttling~\cite{close2026} is internal:
 
 \begin{proposition}[Self-Enforcement via Curvature Throttling]\label{prop:self-enforce}
-In the Disentangle protocol, if agent $i$ receives resources via Commons Pool allocation (\Cref{def:allocation}) but fails to produce coherent coordination (i.e., $\partial\kJ(i,j)/\partial d \leq 0$ for subsequent interactions), then $i$'s allocation in future rounds decreases to zero and $i$'s topological mass decays exponentially. No external enforcement is required.
+In the Disentangle protocol, if agent $i$ receives resources via Commons Pool allocation (\Cref{def:allocation}) but fails to produce coherent coordination (i.e., $\meangrad(i) \leq 0$ for subsequent interactions), then $i$'s allocation in future rounds decreases to zero and $i$'s topological mass decays exponentially. No external enforcement is required.
 \end{proposition}
 
 \begin{proof}
-By \Cref{def:allocation}, allocation is proportional to $\max(0, \nabla\kJ(i))$. If $\nabla\kJ(i) \leq 0$, allocation is zero. By the mass decay property~\cite{close2026}, $\topomass_{\text{decayed}}(i, t) = \topomass(i) \cdot 2^{-(t - t_{\text{last}})/T_{1/2}}$, so without coherent participation, mass decays with half-life $T_{1/2}$. The consequence chain closes: non-performance $\to$ curvature decline $\to$ allocation loss $\to$ mass decay.
+By \Cref{def:allocation}, allocation is proportional to $\max(0, \meangrad(i))$. If $\meangrad(i) \leq 0$, allocation is zero. By the mass decay property~\cite{close2026}, $\topomass_{\text{decayed}}(i, t) = \topomass(i) \cdot 2^{-(t - t_{\text{last}})/T_{1/2}}$, so without coherent participation, mass decays with half-life $T_{1/2}$. The consequence chain closes: non-performance $\to$ curvature decline $\to$ allocation loss $\to$ mass decay.
 \end{proof}
 
 The distributed character of this enforcement is structural: no single agent holds the complete topology.
@@ -760,12 +791,12 @@ It can be exposed as a protocol endpoint that any agent can query to obtain the 
 
 \subsection{Oracle Distribution Example}\label{sec:oracle-example}
 
-Consider a Commons Pool containing 1000 units of compute, with four eligible agents:
+Consider a Commons Pool containing 1000 units of compute, with five agents (four eligible):
 
 \begin{center}
 \begin{tabular}{@{}lrrr@{}}
 \toprule
-Agent & $\topomass$ & $\nabla\kJ$ & Allocation \\
+Agent & $\topomass$ & $\meangrad$ & Allocation \\
 \midrule
 Alice & 450 & $+0.35$ & 389 \\
 Bob   & 380 & $+0.25$ & 278 \\
@@ -831,15 +862,20 @@ Curvature computation is $O(|N(u)| + |N(v)|)$ per edge with the ancestor-depth n
 However, maintaining the full curvature derivative field over a large graph requires $O(|E|)$ computation per epoch.
 For graphs with millions of edges, this may require hierarchical approximation or sampling.
 
-\textbf{Graph connectivity.}
+\textbf{Graph connectivity and cold start.}
 The framework assumes a connected interaction graph.
 Disconnected components have undefined curvature gradients between them, meaning the system cannot allocate resources across components.
-Bootstrap mechanisms are required for new agents entering the network.
+New agents face a cold-start problem: with no interaction history, they have zero curvature and zero topological mass, and therefore receive no allocation.
+The Disentangle protocol addresses this through the bootstrap window~\cite{close2026}, during which new transactions accumulate curvature before the CoherenceMinimum gate applies.
+However, the excitability framework does not yet formalize the transition from bootstrap to steady-state participation, and the optimal bootstrap duration depends on network density in ways that warrant further analysis.
 
-\textbf{Partial legibility.}
+\textbf{Partial legibility and scarcity.}
 \Cref{thm:redundancy} establishes redundancy under \emph{complete} legibility.
 In practice, legibility is partial: curvature measures structural coordination quality but does not capture all dimensions of excitability (e.g., agent-internal cognitive state, resource constraints not visible in the graph).
-The transition is therefore asymptotic, not binary.
+The transition is therefore asymptotic, not binary (\Cref{cor:partial}).
+Additionally, price signals encode not only coordination readiness but also \emph{scarcity}---the relative availability of resources.
+The curvature derivative captures coordination \emph{formation rate} but does not directly encode resource supply constraints.
+Scarcity information may need to be surfaced through auxiliary protocol mechanisms (e.g., Commons Pool capacity reporting) rather than through curvature alone.
 
 \textbf{Temporal dynamics.}
 The curvature derivative is a first-order signal.
@@ -858,9 +894,14 @@ Under what conditions does a network shift from price-dominant to topology-domin
 \Cref{prop:invariance} shows the behaviors converge, but does not identify the tipping point.
 This may require empirical study of networks with both mechanisms operating simultaneously.
 
-\textbf{Adversarial gradient manipulation.}
-Can an agent manipulate $\nabla\kJ$ in their favor without genuine coordination?
+\textbf{Adversarial gradient manipulation and Goodhart risk.}
+Can an agent manipulate $\meangrad$ in their favor without genuine coordination?
 The curvature throttling mechanism~\cite{close2026} addresses the Sybil case, but subtler manipulations (e.g., strategic timing of coordination to maximize gradient at allocation time) deserve formal analysis.
+More broadly, if $\meangrad$ becomes the dominant allocation signal, Goodhart's Law applies: agents may optimize for curvature increase rather than for the underlying coordination quality that curvature is intended to measure.
+The structural defense is that curvature is a graph-global property computed from neighborhood overlap, making it harder to game than a locally controlled metric.
+Concrete attack vectors include coordination theater timed to allocation epochs and clique inflation without genuine work.
+Possible mitigations include windowed or exponentially-smoothed gradient computation (so that burst coordination at epoch boundaries is diluted), a volatility penalty that discounts agents with high gradient variance, and cross-epoch consistency checks comparing $\meangrad$ trajectories against realized coordination outcomes.
+A formal analysis of the gap between optimizing curvature and optimizing coordination is needed.
 
 \subsection{Relationship to Active Inference Economics}
 
@@ -953,10 +994,10 @@ S.~Pal, F.~Yu, K.~E.~Moore, C.~B.~Bruss, and P.~J.~Hancock,
 in \emph{Proc.\ Complex Networks and Their Applications}, pp.~89--101, 2017.
 
 \bibitem{close2026}
-L.~Close,
+L.~J.~Close,
 ``Disentangle: Topological mass consensus with capability-coherence identity for Sybil-resistant agreement via discrete curvature,''
-Independent Researcher, Feb.\ 2026.
-% doi:10.5281/zenodo.XXXXX
+Independent Researcher, February 2026.
+doi:10.5281/zenodo.18671600
 
 \bibitem{graeber2011}
 D.~Graeber,
@@ -978,13 +1019,21 @@ N.~Nisan, T.~Roughgarden, E.~Tardos, and V.~V.~Vazirani, Eds.,
 \emph{Algorithmic Game Theory}.
 Cambridge, UK: Cambridge University Press, 2007.
 
-\bibitem{bruin2013}
-H.~Bruin and S.~Kolyada,
-``Topological games and their applications to dynamical systems,''
-\emph{Topology and its Applications}, vol.~160, no.~15, pp.~2006--2014, 2013.
+\bibitem{mertikopoulos2018}
+P.~Mertikopoulos and W.~H.~Sandholm,
+``Riemannian game dynamics,''
+\emph{Journal of Economic Theory}, vol.~177, pp.~315--364, 2018.
+
+\bibitem{shapley1953}
+L.~S.~Shapley,
+``Stochastic games,''
+\emph{Proceedings of the National Academy of Sciences}, vol.~39, no.~10, pp.~1095--1100, 1953.
+
+\bibitem{chen2009arrow}
+X.~Chen, D.~Dai, Y.~Du, and S.-H.~Teng,
+``Settling the complexity of Arrow-Debreu equilibria in markets with additively separable utilities,''
+in \emph{Proc.\ 50th Annual IEEE Symposium on Foundations of Computer Science (FOCS)}, pp.~273--282, 2009.
 
 \end{thebibliography}
-
-\balance
 
 \end{document}

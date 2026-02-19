@@ -6,4 +6,6 @@
 *.fls
 *.fdb_latexmk
 *.synctex.gz
+*.bbl
+*.blg
 .DS_Store
